@@ -8,6 +8,7 @@ import {
 	backgroundColors,
 	contentWidthArr,
 	defaultArticleState,
+	ArticleStateType,
 	OptionType,
 } from 'src/constants/articleProps';
 import { RadioGroup } from 'src/ui/radio-group';
@@ -17,19 +18,15 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './ArticleParamsForm.module.scss';
 import clsx from 'clsx';
 
-// interface ArticleParams {
-// 	fontFamilyOption: OptionType;
-// 	fontSizeOption: OptionType;
-// 	fontColor: OptionType;
-// 	backgroundColor: OptionType;
-// 	contentWidth: OptionType;
-// }
+interface ArticleParamsFormProps {
+	onApply: (state: ArticleStateType) => void;
+	onReset: () => void;
+}
 
-// interface ArticleParamsFormProps {
-// 	onApply: (params: ArticleParams) => void;
-// }
-
-export const ArticleParamsForm = () => {
+export const ArticleParamsForm = ({
+	onApply,
+	onReset,
+}: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const sidebarRef = useRef<HTMLFormElement>(null);
 
@@ -86,16 +83,19 @@ export const ArticleParamsForm = () => {
 
 	const handleSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault();
-		selectedFontFamily;
-		selectedFontSize;
-		selectedFontColors;
-		selectedBackgroundColors;
-		selectedContentWidth;
+		onApply({
+			fontFamilyOption: selectedFontFamily,
+			fontSizeOption: selectedFontSize,
+			fontColor: selectedFontColors,
+			backgroundColor: selectedBackgroundColors,
+			contentWidth: selectedContentWidth,
+		});
 		setIsOpen(false);
 	};
 
 	const handleReser = (e: React.SyntheticEvent) => {
 		e.preventDefault();
+		onReset();
 		setSelectedFontFamily(defaultArticleState.fontFamilyOption);
 		setSelectedFontSize(defaultArticleState.fontSizeOption);
 		setSelectedFontColors(defaultArticleState.fontColor);
